@@ -14,17 +14,19 @@ dotenv.config({
 connectDB()
 .then(() => {
     app.on("error", (error) =>  {
-        console.log("ERRR:" , error);
-        throw error
-    })
-    
+        console.error("ERROR:", error);
+        process.exit(1);  // Stops the server on error
+    });
+
     app.listen(process.env.PORT || 5000, () => {
-        console.log(`Server is running at port : ${process.env.PORT}`);
-    })
+        console.log(`Server is running at port: ${process.env.PORT}`);
+    });
 })
-.catch((err) => {
-    console.log("MONGODB connection failed !!!",err);
-})
+.catch((error) => {
+    console.error("MONGODB connection failed!!!", error);
+    process.exit(1);  // Stop the app if DB connection fails
+});
+
 
 /*
 import express from "express";
