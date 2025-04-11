@@ -4,9 +4,9 @@ import fs from "fs"
 // (async function() {
 
 cloudinary.config({ 
-    cloud_name: 'process.env.CLOUDINARY_CLOUD_NAME', 
-    api_key: 'process.env.CLOUDINARY_API_KEY', 
-    api_secret: 'process.env.CLOUDINARY_API_SECRET' 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET 
 });
 
 const uploadOnCloudinary = async (localFilePath) => {
@@ -56,3 +56,5 @@ cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/
     
 //     console.log(autoCropUrl);    
 // // })();
+
+export default uploadOnCloudinary;
