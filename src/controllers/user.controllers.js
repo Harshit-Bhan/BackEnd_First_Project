@@ -26,7 +26,7 @@ const registerUser = asyncHandler( async (req , res) => {
             throw new ApiError(400 , "Please fill all fields");
         }
 
-        User.findOne({
+        const existedUser = await User.findOne({
             $or: [{username} , {email}]
         })
 
@@ -34,9 +34,22 @@ const registerUser = asyncHandler( async (req , res) => {
             throw new ApiError(400 , "Username or Email already exists");
         }
 
-        const avatarLocalPath = req.file?.avatar[0]?.path;
-        const coverImageLocalPath = req.files?.coverImage[0]?.path;
+        console.log(req.files)
+        
 
+        const avatarLocalPath = req.files?.avatar[0]?.path;
+        // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+        let coverImageLocalPath;
+
+        if (
+            req.files &&
+            req.files.coverImage &&
+            Array.isArray(req.files.coverImage) &&
+            req.files.coverImage[0]?.path
+            ) {
+            coverImageLocalPath = req.files.coverImage[0].path;
+        }
 
 
         if(!avatarLocalPath) {
@@ -53,7 +66,7 @@ const registerUser = asyncHandler( async (req , res) => {
         const user = await User.create({
             fullName,
             avatar: avatar.url,
-            coverImage: coverImage.url || "",
+            coverImage: coverImage?.url || "",
             email,
             password,
             username: username.toLowerCase()

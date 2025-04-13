@@ -38,4 +38,67 @@ $or: It's a MongoDB operator that allows you to match any one of the conditions 
 { username }: Shorthand for { username: username }
 
 { email }: Shorthand for { email: email }>
+
+
+<-------------------------------<app.js>--------------------------------->
+1. express.json({ limit: "16kb" })
+Parses incoming JSON data from the request body.
+
+Converts it into a JavaScript object you can access with req.body.
+
+limit: "16kb" restricts the maximum size of the JSON body.
+
+✅ Example:
+
+POST /api/user
+{
+  "name": "Harshit",
+  "age": 21
+}
+📦 Access in backend:
+
+req.body.name  // "Harshit"
+req.body.age   // 21
+
+2. express.urlencoded({ extended: true, limit: "16kb" })
+Parses form data (from HTML forms with application/x-www-form-urlencoded).
+
+Converts it into a JavaScript object.
+
+extended: true allows nested objects in form data.
+
+✅ Example HTML Form:
+
+<form action="/submit" method="POST">
+  <input name="username" />
+  <input name="email" />
+</form>
+📦 Access in backend:
+
+req.body.username
+req.body.email
+
+3. express.static("public")
+Makes everything inside the public/ folder accessible via the browser.
+
+Great for serving images, CSS, JS, HTML, etc.
+
+✅ Folder structure:
+
+public/
+  ├── style.css
+  └── logo.png
+✅ In HTML:
+
+<link rel="stylesheet" href="/style.css">
+<img src="/logo.png" />
+
+4. cookieParser()
+Parses cookies sent by the browser and makes them available as req.cookies.
+
+✅ Example:
+
+// If browser sends: Cookie: user=Harshit
+console.log(req.cookies.user);  // "Harshit"
+
  
