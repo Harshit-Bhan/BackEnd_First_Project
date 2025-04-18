@@ -101,4 +101,37 @@ Parses cookies sent by the browser and makes them available as req.cookies.
 // If browser sends: Cookie: user=Harshit
 console.log(req.cookies.user);  // "Harshit"
 
+<--------------------<auth.middleware.js>-------------------->
+
+req.cookies?.accessToken: Tries to get the token from cookies.
+"?." ensures that it doesn't throw an error if req.cookies is undefined (safe access).
+
+req.header("Authorization")?.replace("Bearer", ""):
+If the token is not in cookies, it checks the Authorization header.
+It assumes the token comes with the Bearer prefix (e.g., Bearer abc123).
+replace("Bearer", "") removes the Bearer prefix, leaving just the token value.
+
+const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+This line verifies the JWT (JSON Web Token) received from the client using a secret key.
+It checks whether the token: Is valid (not tampered with), Is not expired, And was signed with the correct secret.
+
+token: The JWT sent by the client (via cookies or headers).
+process.env.ACCESS_TOKEN_SECRET: The secret key used to sign the token (stored in your .env file for security).
+If the token is valid, it returns the decoded payload (e.g., user ID).
+If not, it throws an error.
+
+
+<<------------------------------------------>>
+  const options = {
+        httpOnly: true,
+        secure: true
+    } : this ensures that the cookies are not modified at the frontend and can only be modified at the server
  
+ return res.status(200).cookie("accessToken",accessToken,options).cookie("refreshToken",refreshToken,options).json(
+        new ApiResponse(
+            200,{
+                user: loggedInUser,accessToken,refreshToken
+            },
+            "User logged in SuccessFully"
+        )
+    ) : here we added accesstoken and refreshtoken in apliresponse because it might be possible that user want to store it in the localstorage or he might be developing a mobile app.
